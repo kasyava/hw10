@@ -33,10 +33,10 @@ router.post("/", upload.single("image"), (req, res) => {
     if (req.file) data.image = req.file.filename;
 
 
-        const artist = new Artist(data);
-        artist.save()
-            .then(() => res.send(data))
-            .catch(error => res.status(500).send(error));
+    const artist = new Artist(data);
+    artist.save()
+        .then(() => res.send(data))
+        .catch(error => res.status(400).send(error));
 
 });
 
