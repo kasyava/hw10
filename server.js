@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const artists = require("./app/artists");
 const albums = require("./app/albums");
+const tracks = require("./app/tracks");
 
 
 const config =  require("./config");
@@ -26,6 +27,7 @@ db.once('open', () => {
 
     app.use('/artists', artists);
     app.use('/albums', albums());
+    app.use('/tracks', tracks);
 
     app.listen(port, () => console.log(`Server started on ${port}`));
 });
