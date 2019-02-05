@@ -20,11 +20,28 @@ const upload = multer({storage});
 const createRouter = () => {
     const router = express.Router();
 
-    router.get("/", (req, res) => {
-        Album.find().populate('artist')
+    router.get("/:id", (req, res) => {
+
+        Album.findOne({_id: req.params.id}).populate('artist')
             .then(results => res.send(results))
-            .catch(e => res.send(e).status(500))
+            .catch(e => res.send(e).status(400));
+
     });
+
+    router.get("/", (req, res) => {
+
+        if(req.query.artist){
+            Album.find({artist: req.query.artist}).populate('artist')
+                .then(results => res.send(results))
+                .catch(e => res.send(e).status(400));
+        }
+        else {
+            Album.find().populate('artist')
+                .then(results => res.send(results))
+                .catch(e => res.send(e).status(400))
+        }
+    });
+
 
     router.post("/", upload.single("image"), (req, res) => {
         console.log(req.body);

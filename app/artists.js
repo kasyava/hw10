@@ -35,7 +35,7 @@ router.post("/", upload.single("image"), (req, res) => {
 
     const artist = new Artist(data);
     artist.save()
-        .then(() => res.send(data))
+        .then((result) => res.send(result))
         .catch(error => res.status(400).send(error));
 
 });
