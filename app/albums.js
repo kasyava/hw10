@@ -17,46 +17,44 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-const createRouter = () => {
-    const router = express.Router();
+const router = express.Router();
 
-    router.get("/:id", (req, res) => {
+router.get("/:id", (req, res) => {
 
-        Album.findOne({_id: req.params.id}).populate('artist')
+    Album.findOne({_id: req.params.id}).populate('artist')
+        .then(results => res.send(results))
+        .catch(e => res.send(e).status(400));
+
+});
+
+router.get("/", (req, res) => {
+
+    if(req.query.artist){
+        Album.find({artist: req.query.artist}).populate('artist')
             .then(results => res.send(results))
             .catch(e => res.send(e).status(400));
-
-    });
-
-    router.get("/", (req, res) => {
-
-        if(req.query.artist){
-            Album.find({artist: req.query.artist}).populate('artist')
-                .then(results => res.send(results))
-                .catch(e => res.send(e).status(400));
-        }
-        else {
-            Album.find().populate('artist')
-                .then(results => res.send(results))
-                .catch(e => res.send(e).status(400))
-        }
-    });
+    }
+    else {
+        Album.find().populate('artist')
+            .then(results => res.send(results))
+            .catch(e => res.send(e).status(400))
+    }
+});
 
 
-    router.post("/", upload.single("image"), (req, res) => {
-        console.log(req.body);
+router.post("/", upload.single("image"), (req, res) => {
+    console.log(req.body);
 
-        const data = req.body;
-        if (req.file) data.image = req.file.filename;
+    const data = req.body;
+    if (req.file) data.image = req.file.filename;
 
 
-        const album = new Album(data);
-        album.save()
-            .then((result) => res.send(result))
-            .catch(error => res.send(error).status(400));
+    const album = new Album(data);
+    album.save()
+        .then((result) => res.send(result))
+        .catch(error => res.send(error).status(400));
 
-    });
+});
 
-    return router;
-}
-module.exports = createRouter;
+
+module.exports = router;

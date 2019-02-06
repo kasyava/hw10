@@ -5,6 +5,7 @@ const nanoid = require("nanoid");
 
 const config = require("../config");
 const Track = require("../models/Track");
+const Album = require("../models/Album");
 
 const storage = multer.diskStorage({
     destination(req, file, cd){
@@ -16,7 +17,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({storage});
-
 
 const router = express.Router();
 
@@ -33,9 +33,18 @@ router.get("/", (req, res) => {
     }
 });
 
+router.get("/:id", async (req, res) => {
+    let albumList = await Album.find({artist : req.params.id});
+    let tracksList =[];
+
+    for(let i = 0; i < albumList.length; i++ ){
+        tracksList.push.apply(tracksList, await Track.find({album : albumList[i]._id}).populate('album'));
+    }
+
+    res.send(tracksList);
+});
 
 router.post("/", upload.none(), (req, res) => {
-    console.log(req.body);
 
     const track = new Track(req.body);
     track.save()

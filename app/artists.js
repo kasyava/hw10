@@ -17,7 +17,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -27,11 +26,9 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", upload.single("image"), (req, res) => {
-    console.log(req.body);
 
     const data = req.body;
     if (req.file) data.image = req.file.filename;
-
 
     const artist = new Artist(data);
     artist.save()
