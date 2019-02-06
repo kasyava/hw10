@@ -14,8 +14,6 @@ html,body, .wrapper, .col{
 .one{
 	width:70%;
 	text-align: center;
-
-
 }
 .two{
 	width:30%;
@@ -23,6 +21,12 @@ html,body, .wrapper, .col{
 	text-align: center;
 
 }
+.frm{
+	width:50%;
+	//text-align: center;
+	margin: 20px;
+}
+
 .header{
 	height: 60px;
 
